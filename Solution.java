@@ -80,7 +80,7 @@ public class Solution{
 		Solution.logger.log("TestCase : " + testCase);
 		Solution.logger.log("===========================================");
 		while(true) {
-			String inputCommand = scanner.next();
+			String inputCommand = scanner.nextLine();
 			if(inputCommand.equals("Exit")) break;
 			if(inputCommand.length() == 0)continue;
 			if(inputCommand.equals("nextTC()")) {

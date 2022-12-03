@@ -24,8 +24,7 @@ public class CommandManager {
 			return new ReadCommand(splitString[0].trim(), splitString[1].trim());
 		}else if(commandName.equals("W")) {
 			String argumentList = inputString.substring(firstParenthesisIndex + 1, inputString.length() - 1);
-			String[] splitString = argumentList.split("\\s*,\\s*");
-			System.out.println(Arrays.toString(splitString));
+			String[] splitString = argumentList.split(",");
 			return new WriteCommand(splitString[0].trim(), splitString[1].trim(), splitString[2].trim());
 		}else if(commandName.equals("dump")) {
 			return new DumpCommand();
