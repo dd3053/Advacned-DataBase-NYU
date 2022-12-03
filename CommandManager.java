@@ -1,3 +1,13 @@
+/*
+ * 
+ * Author : Anand Kumar [ak8288]
+ * Creation Date : 22nd November 2022
+ * Last Modification Date:	3rd December 2022
+ * 
+ * Description : 
+ * Creates a Command and its parameters in accordance with the input provided by the user.
+ * 
+ */
 import java.io.*;
 import java.util.Arrays;
 
@@ -7,7 +17,11 @@ import java.util.Arrays;
 
 public class CommandManager {
 	//Takes an input String and converts it into a Command
-	
+	/**
+	 * 
+	 * @param inputString : Takes the input String from the user and converts it to an appropriate Command.
+	 * @return The appropriate Command
+	 */
 	public Command getCommand(String inputString) {
 		inputString = inputString.trim();
 		int firstParenthesisIndex = inputString.indexOf('(');

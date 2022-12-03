@@ -1,3 +1,15 @@
+/*
+ * 
+ * Author : Devesh Devendra [dd3053]
+ * Creation Date : 22nd November 2022
+ * Last Modification Date:	3rd December 2022
+ * 
+ * Description : 
+ * This class Deals with the Data on a given Site
+ * 
+ * 
+ */
+
 import java.util.*;
 
 enum DataManagerStatus{
@@ -14,6 +26,11 @@ public class DataManager {
 	DataManagerStatus dataManagerStatus;
 	public int seedVal;
 	
+	/**
+	 * 
+	 * @param seedVal
+	 * Initialises a Data Site in accordance with the SeedVal
+	 */
 	public DataManager(int seedVal) {
 		commitedTable = new HashMap<>();
 		commitedTime = new HashMap<>();
@@ -44,7 +61,13 @@ public class DataManager {
 		
 		return false;
 	}
-	
+	/**
+	 * 
+	 * @param transaction
+	 * @param variableName
+	 * @return true if the transaction is able to acquire a read lock on the variable Name. False if the transaction is unable to acquire a ReadLock
+	 * If Read Lock is not acquired, the trasnaction is wait Listed.
+	 */
 	public boolean acquireReadLock(Transaction transaction, String variableName) {
 		if(currentLocks.getOrDefault(variableName, new ArrayList<>()).size() > 0) {
 			ArrayList<Lock> listOfLocks = currentLocks.get(variableName);
@@ -98,7 +121,12 @@ public class DataManager {
 		transaction.transactionStatus = TransactionStatus.WAITING;
 		return false;
 	}
-	
+	/**
+	 * 
+	 * @param transaction
+	 * @param variableName
+	 * @return true if a transaction can get a Write Lock. false if a trasnaction cannot get a Write Lock.
+	 */
 	public boolean checkWriteLock(Transaction transaction, String variableName) {
 		ArrayList<Lock> currentLockList = currentLocks.getOrDefault(variableName, new ArrayList<>());
 		ArrayList<Lock> currentWaitList = waitingLocks.getOrDefault(variableName, new ArrayList<>());
@@ -123,6 +151,13 @@ public class DataManager {
 		return false;
 	}
 	
+	/**
+	 * 
+	 * @param transaction : The transaction that wants to acquire Lock.
+	 * @param variableName : The name of the variable on which Write Lock is requested.
+	 * @param variableValue : The Value that the Transaction wants to write to the Variable.
+	 * @return true signifying that a transaction acquires a Write Log for a Variable Name.
+	 */
 	public boolean acquireWriteLock(Transaction transaction, String variableName, int variableValue) {
 		Lock newLock = new Lock(transaction, variableName, variableValue, this, LockType.WRITE_LOCK, LockStatus.LOCK_ACQUIRED);
 		ArrayList<Lock> currentLockList = currentLocks.getOrDefault(variableName, new ArrayList<>());
@@ -131,7 +166,14 @@ public class DataManager {
 		transaction.lockList.add(newLock);
 		return true;
 	}
-	
+
+	/**
+	 * 
+	 * @param transaction : The transaction that wants to acquire Lock.
+	 * @param variableName : The name of the variable on which Write Lock is requested.
+	 * @param variableValue : The Value that the Transaction wants to write to the Variable.
+	 * @return true signifying that a transaction is in the Waitlist for the variable.
+	 */
 	public boolean waitListForWriteLock(Transaction transaction, String variableName, int variableValue) {
 		Lock newLock = new Lock(transaction, variableName, variableValue, this, LockType.WRITE_LOCK, LockStatus.LOCK_WAITING);
 		ArrayList<Lock> waitingLockList = waitingLocks.getOrDefault(variableName, new ArrayList<>());
@@ -142,6 +184,9 @@ public class DataManager {
 		return true;
 	}
 	
+	/**
+	 * Converts the Site to a corresponding String value
+	 */
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for(int i = 1; i <= 20 ; i++) {
@@ -154,7 +199,12 @@ public class DataManager {
 		}
 		return sb.toString();
 	}
-	
+	/**
+	 * 
+	 * @param transaction : The transaction whose locks will the removed.
+	 * @param variableName : The name of the Variable for which the Transactions would be removed.
+	 * @return true signifying that all the locks[including the WaitListed ones] corresponding to the transaction and a variableName will be removed.
+	 */
 	public boolean removeLock(Transaction transaction, String variableName) {
 		//Iterate through all the Locks and find which locks correspond to the given Site
 		// Remove them
@@ -187,7 +237,13 @@ public class DataManager {
 		this.waitingLocks.put(variableName, tmpLockList);
 		return true;
 	}
-	
+	/**
+	 * 
+	 * @param variableName : The Variable whose value will be commited
+	 * @param variableValue : The value that will be written.
+	 * @param commitTime : The time at which Transaction is being committed.
+	 * @return @true signifying that the value has been committed.
+	 */
 	public boolean commitValue(String variableName, int variableValue, int commitTime) {
 		commitedTable.put(variableName, variableValue);
 		commitedTime.put(variableName, commitTime);
@@ -195,7 +251,11 @@ public class DataManager {
 		return true;
 	}
 	
-	//Help to Reacquire Lock of lock
+	/**
+	 * 
+	 * @param lock : The lock that will acquire the Variable Now.
+	 * This lock was in Waiting Queue but now would be able to fetch the value.
+	 */
 	public void acquireWaitingLock(Lock lock) {
 		// TODO Auto-generated method stub
 		// 1. Remove from Waiting List

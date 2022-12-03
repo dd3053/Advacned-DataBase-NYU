@@ -1,3 +1,14 @@
+/*
+ * 
+ * Author : Anand Kumar [ak8288]
+ * Creation Date : 22nd November 2022
+ * Last Modification Date:	3rd December 2022
+ * 
+ * Description : 
+ * 
+ * 
+ */
+
 import java.util.*;
 
 public class TransactionManager {
@@ -17,6 +28,9 @@ public class TransactionManager {
 		currentTime = 0;
 	}
 	
+	/**
+	 * Initialises the Data Sites.
+	 */
 	public void initialiseDataBase() {
 		//Send a SeedValue and all the Sites will manage the creation of DataBases : 
 		sites = new DataManager[11];
@@ -26,6 +40,10 @@ public class TransactionManager {
 		}
 	}
 	
+	/**
+	 * 
+	 * @return true if there are any Active/Live/Waiting Transactions
+	 */
 	private boolean hasActiveTransaction() {
 		int count = 0;
 		for(String transactionName : this.transactionDetails.keySet()) {
@@ -37,6 +55,10 @@ public class TransactionManager {
 		return count!=0;
 	}
 	
+	/**
+	 * 
+	 * @return @true if there is a Deadlock. @false Otherwise.
+	 */
 	private boolean hasDeadLock() {
 		if(!hasActiveTransaction()) return false;
 		ArrayList<Transaction> listOfActiveTransaction = getReadyTransactions();
@@ -44,6 +66,10 @@ public class TransactionManager {
 		return false;
 	}
 	
+	/**
+	 * 
+	 * @return the Youngest Transaction to be killed to get rid of DeadLock
+	 */
 	private Transaction getYoungestTransaction() {
 		Transaction transaction = null;
 		int timeOfStart = -1;
@@ -57,6 +83,11 @@ public class TransactionManager {
 		return transaction;
 	}
 	
+	/**
+	 * 
+	 * @param inputCommand : Takes the input Command from CLI/File and Executes it accordingly.
+	 * @param currentTime : The currentTime
+	 */
 	public void executeCommand(String inputCommand, int currentTime) {
 		currentTime++;
 		//Check here for DeadLock Detection and Abort the youngest Process : 
@@ -70,13 +101,21 @@ public class TransactionManager {
 		newCommand.executeCommand(this, currentTime);
 	}
 	
+	/**
+	 * 
+	 * @param transaction : Removes all the Locks on all Sites related to a Given Transaction
+	 */
 	public void abortTransaction(Transaction transaction) {
 		for(Lock lock : transaction.lockList) {
 			lock.dataManager.removeLock(transaction, lock.variableName);
 		}
 	}
 	
-	
+	/**
+	 * 
+	 * @param transaction
+	 * Commits all the Values to be written by the Transaction
+	 */
 	public void commitTransaction(Transaction transaction) {
 		// Basically, replicate the Variables on which I have got the Locks
 		// To be in this state, I should have all the Locks :
@@ -90,6 +129,10 @@ public class TransactionManager {
 		
 	}
 	
+	/**
+	 * 
+	 * @return the @list of Transactions that can be excuted Next and they are not waiting on any other Transaction.
+	 */
 	private ArrayList<Transaction> getReadyTransactions(){
 		ArrayList<Transaction> res = new ArrayList<>();
 		HashMap<String, HashSet<String>> adjList = new HashMap<>();
@@ -146,6 +189,9 @@ public class TransactionManager {
 		return res;
 	}
 	
+	/**
+	 * Checks if a Waiting Transaction[Due to Site Down] can be made to run.
+	 */
 	public void enqueueNextWaitingTransaction() {
 		//There can be multiple Transactions that can be started :
 		ArrayList<Transaction> readyTransaction = getReadyTransactions();

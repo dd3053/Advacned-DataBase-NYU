@@ -1,9 +1,23 @@
+/*
+ * 
+ * Author :Devesh Devendra [dd3053] & Anand Kumar[ak8288][This was a Complex File so tasks divided between the two authors]
+ * Creation Date : 22nd November 2022
+ * Last Modification Date:	3rd December 2022
+ * 
+ * Description : 
+ * - The proper Command is created and is executed accordingly.
+ * 
+ */
 import java.util.*;
 
 abstract public class Command {
 	
 	
-	
+	/**
+	 * 
+	 * @param variableNumber : The Name of the Variable
+	 * @return : Whether the provided Variable is present only on one server or replicated across all the servers.
+	 */
 	public boolean isSingleReplicated(String variableNumber) {
 		String num = variableNumber.substring(1);
 		int val = Integer.parseInt(num);
@@ -21,6 +35,10 @@ class BeginCommand extends Command{
 	}
 	
 	@Override
+	/**
+	 * Executes the Begin Command.
+	 * Stores the name and other Transaction Specific information in the Transaction Manager
+	 */
 	public void executeCommand(TransactionManager transactionManager, int currentTime) {
 		Transaction newTransaction = new Transaction(this.transactionName, TransactionType.READ_AND_WRITE);
 		transactionManager.transactionDetails.put(transactionName, newTransaction);
@@ -36,6 +54,10 @@ class BeginROCommand extends Command{
 		this.transactionName = transactionName;
 	}
 	@Override
+	/**
+	 * Executes the BeginRO Command.
+	 * Stores the name and other Transaction Specific information in the Transaction Manager
+	 */
 	public void executeCommand(TransactionManager transactionManager, int currentTime) {
 		Transaction newTransaction = new Transaction(this.transactionName, TransactionType.READ_ONLY);
 		transactionManager.transactionDetails.put(transactionName, newTransaction);
@@ -71,8 +93,11 @@ class ReadCommand extends Command{
 		this.transactionName = transactionName;
 		this.variableName = variableName;
 	}
-	
 	@Override
+	/**
+	 * Executes the Read Command : 
+	 * The Transaction can be Read Only or Read-Write Transaction.
+	 */
 	public void executeCommand(TransactionManager transactionManager, int currentTime) {
 		Transaction transaction = transactionManager.transactionDetails.get(this.transactionName);
 		if(transaction.transactionStatus == TransactionStatus.ABORTED) return;
@@ -136,6 +161,9 @@ class WriteCommand extends Command{
 	}
 	
 	@Override
+	/**
+	 * Executes the Write Command for a given Transaction.
+	 */
 	public void executeCommand(TransactionManager transactionManager, int currentTime) {
 		// TODO Auto-generated method stub
 		
@@ -184,6 +212,9 @@ class WriteCommand extends Command{
 
 class DumpCommand extends Command{
 	@Override
+	/**
+	 * Executes the dump() command and prints all the data from all the sites.
+	 */
 	public void executeCommand(TransactionManager transactionManager, int currentTime) {
 		// TODO Auto-generated method stub
 		for(int i = 1; i < transactionManager.sites.length; i++) {
@@ -199,6 +230,9 @@ class EndCommand extends Command{
 		this.transactionName = transactionName;
 	}
 	@Override
+	/**
+	 * Ends a Transaction. Shows if a transaction is committed or Aborted
+	 */
 	public void executeCommand(TransactionManager transactionManager, int currentTime) {
 		Transaction transaction = transactionManager.transactionDetails.get(this.transactionName);
 		if(transaction.transactionType == TransactionType.READ_ONLY) {
@@ -246,6 +280,9 @@ class FailCommand extends Command{
 	}
 	
 	@Override
+	/**
+	 * Simulates the failure of a Site.
+	 */
 	public void executeCommand(TransactionManager transactionManager, int currentTime) {
 		DataManager failedDataManager = transactionManager.sites[this.siteNumber];
 		failedDataManager.dataManagerStatus = DataManagerStatus.FAILED;
@@ -286,6 +323,9 @@ class RecoverCommand extends Command{
 	}
 	
 	@Override
+	/**
+	 * Simulates the recovery of a Site
+	 */
 	public void executeCommand(TransactionManager transactionManager, int currentTime) {
 		DataManager recoveredSite = transactionManager.sites[siteNumber];
 		recoveredSite.dataManagerStatus = DataManagerStatus.WORKING;
