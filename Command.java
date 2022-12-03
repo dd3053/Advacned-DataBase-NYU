@@ -79,15 +79,15 @@ class ReadCommand extends Command{
 		
 		if(transaction.transactionType == TransactionType.READ_ONLY) {
 			if(transaction.variableValues.containsKey(this.variableName)) {
-				System.out.println(this.variableName + ": " + transaction.variableValues.get(this.variableName));
+				Solution.logger.log(this.variableName + ": " + transaction.variableValues.get(this.variableName));
 			}else {
 				if(isSingleReplicated(this.variableName)) {
 					transaction.transactionStatus = TransactionStatus.WAITING;
 					transactionManager.waitListedCommands.add(this);
-					System.out.println("Transaction Waiting Due to Site Down : " + transaction.transactionName);
+					Solution.logger.log("Transaction Waiting Due to Site Down : " + transaction.transactionName);
 				}else {
 					transaction.transactionStatus = TransactionStatus.ABORTED;
-					System.out.println("Transaction Aborted : " + transaction.transactionName);
+					Solution.logger.log("Transaction Aborted : " + transaction.transactionName);
 					transactionManager.abortTransaction(transaction);
 					
 				}
@@ -108,24 +108,17 @@ class ReadCommand extends Command{
 			boolean getLock = dataManager.acquireReadLock(transaction, this.variableName);
 			if(!getLock) {
 				transaction.transactionStatus = TransactionStatus.WAITING;
-				System.out.println("Transaction Waiting on Read Lock : " + transaction.transactionName);
+				Solution.logger.log("Transaction Waiting on Read Lock : " + transaction.transactionName);
 			}else {
-				System.out.println(this.variableName  + ": " + dataManager.commitedTable.get(this.variableName));
+				Solution.logger.log(this.variableName  + ": " + dataManager.commitedTable.get(this.variableName));
 			}
 			isAdded = true;
 			break;	//Read From one site only
 		}
 		if(!isAdded) {
-			if(isSingleReplicated(this.variableName)) {
 				transaction.transactionStatus = TransactionStatus.WAITING;
 				transactionManager.waitListedCommands.add(this);
-				System.out.println("Transaction Waiting Due to Site Down : " + transaction.transactionName);
-			}else {
-				transaction.transactionStatus = TransactionStatus.ABORTED;
-				System.out.println("Transaction Aborted : " + transaction.transactionName);
-				transactionManager.abortTransaction(transaction);
-				transactionManager.enqueueNextWaitingTransaction();
-			}
+				Solution.logger.log("Transaction Waiting Due to Site Down : " + transaction.transactionName);
 		}
 	}
 	
@@ -161,7 +154,7 @@ class WriteCommand extends Command{
 		if(validDataManagers.size() == 0) {
 			transactionManager.waitListedCommands.add(this);
 			transaction.transactionStatus = TransactionStatus.WAITING;
-			System.out.println("No Site Avialable for writing for Transaction : " + transaction.transactionName);
+			Solution.logger.log("No Site Avialable for writing for Transaction : " + transaction.transactionName);
 			return;
 		}
 		
@@ -182,7 +175,7 @@ class WriteCommand extends Command{
 			}
 		}
 		if(!canGetLock) {
-			System.out.println("Lock Conflict for Transaction : " + transaction.transactionName);
+			Solution.logger.log("Lock Conflict for Transaction : " + transaction.transactionName);
 		}
 		
 	}
@@ -194,7 +187,7 @@ class DumpCommand extends Command{
 	public void executeCommand(TransactionManager transactionManager, int currentTime) {
 		// TODO Auto-generated method stub
 		for(int i = 1; i < transactionManager.sites.length; i++) {
-			System.out.println("site "+i+" - " + transactionManager.sites[i]);
+			Solution.logger.log("site "+i+" - " + transactionManager.sites[i]);
 		}
 	}
 }
@@ -211,9 +204,9 @@ class EndCommand extends Command{
 		if(transaction.transactionType == TransactionType.READ_ONLY) {
 			if(transaction.transactionStatus != TransactionStatus.ABORTED && transaction.transactionStatus != TransactionStatus.WAITING) {
 				transaction.transactionStatus = TransactionStatus.COMMITED;
-				System.out.println("Read Only Transaction Ends (Commited) : " + transaction.transactionName);
+				Solution.logger.log("Read Only Transaction Ends (Commited) : " + transaction.transactionName);
 			}else {
-				System.out.println("Read Only Transaction Ends (Aborted) : " + transaction.transactionName);
+				Solution.logger.log("Read Only Transaction Ends (Aborted) : " + transaction.transactionName);
 			}
 			return;
 		}
@@ -236,9 +229,9 @@ class EndCommand extends Command{
 		}
 		
 		if(transaction.transactionStatus == TransactionStatus.COMMITED) {
-			System.out.println("Transaction Committed : " + transaction.transactionName);
+			Solution.logger.log("Transaction Committed : " + transaction.transactionName);
 		}else {
-			System.out.println("Transaction Aborted : " + transaction.transactionName);
+			Solution.logger.log("Transaction Aborted : " + transaction.transactionName);
 		}
 		transactionManager.abortTransaction(transaction);
 		transactionManager.enqueueNextWaitingTransaction();
@@ -275,7 +268,7 @@ class FailCommand extends Command{
 			if(transaction.transactionStatus == TransactionStatus.COMMITED) continue;
 			if(transaction.transactionStatus == TransactionStatus.ABORTED) continue;
 			transactionManager.abortTransaction(transaction);
-			System.out.println("Aborting Transaction : " + transaction.transactionName);
+			Solution.logger.log("Aborting Transaction : " + transaction.transactionName);
 			transaction.transactionStatus = TransactionStatus.ABORTED;
 		}
 		

@@ -191,7 +191,7 @@ public class DataManager {
 	public boolean commitValue(String variableName, int variableValue, int commitTime) {
 		commitedTable.put(variableName, variableValue);
 		commitedTime.put(variableName, commitTime);
-		System.out.println("Writing Value : " + variableName + "." + this.seedVal);
+		Solution.logger.log("Writing Value : " + variableName + "." + this.seedVal);
 		return true;
 	}
 	

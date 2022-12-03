@@ -64,7 +64,7 @@ public class TransactionManager {
 			Transaction transaction = getYoungestTransaction();
 			abortTransaction(transaction);
 			transaction.transactionStatus = TransactionStatus.ABORTED;
-			System.out.println("Aborting Transaction : " + transaction.transactionName);
+			Solution.logger.log("Aborting Transaction : " + transaction.transactionName);
 		}
 		Command newCommand = commandManager.getCommand(inputCommand);
 		newCommand.executeCommand(this, currentTime);
@@ -156,7 +156,7 @@ public class TransactionManager {
 				if(lock.lockStatus == LockStatus.LOCK_WAITING) {
 					lock.dataManager.acquireWaitingLock(lock);
 					if(lock.lockType == LockType.READ_LOCK) {
-						System.out.println(lock.variableName + ": "+lock.dataManager.commitedTable.get(lock.variableName));
+						Solution.logger.log(lock.variableName + ": "+lock.dataManager.commitedTable.get(lock.variableName));
 					}
 				}
 			}
