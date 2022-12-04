@@ -21,8 +21,6 @@ reprounzip directory setup RepCRec.rpz ~/<yourDesiredDirectoryName>
 reprounzip directory run ~/<yourDesiredDirectoryName>
 ```
 
-**Note** : Please use Absolute Paths for the input and output Files.
-
 Please check out the different Modes explained in the section **Executing the Program Section** for more details about the Program
 
 ## Comiling The Files : 
@@ -198,6 +196,8 @@ TestCases.txt
 Output File : 
 newOutput.txt
 ```
+
+**Note : Please use Absolute Paths for the input and output Files in Reprozip.**
 
 ## Basic Commands 
 The following commands are supported : 
