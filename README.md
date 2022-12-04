@@ -30,20 +30,33 @@ javac *.java
 
 ## Executing the Program
 
-The Program runs in 3 modes : 
-
-### Mode 1 : Interactive Mode
-
-In this mode, the input is provided using the Command Line.
-
-It is started using the following Command : 
+The Program starts by the following Command : 
 ```
 java Solution
 ```
 
+Afterwards, the Program Requests to Choose one of the following Modes : 
+
+1. Interactive Mode : The user provides the input using the Terminal and the Output is printed just after the Command Execution.
+
+2. Input From File And Output to Command Line : The input is taken from a file and the output is flushed on the terminal.
+
+3. Input From File And Output to File : The input is taken from an input File and the output is flushed in the provided output File.
+
+```
+Enter the Number for the corresponding Mode : 
+(1) Interactive Mode
+(2) Input From File And Output to Command Line
+(3) Input From File And Output to File
+```
+
+### Mode 1 : Interactive Mode
+To Enter the Interactive Mode, press 1.
+
+In this mode, the input is provided using the Command Line.
+
 Example : 
 ```
-COunt of Args : 0
 ===========================================
 TestCase : 1
 ===========================================
@@ -81,33 +94,43 @@ site 8 - x2: 102 x4: 40 x6: 60 x7: 70 x8: 80 x10: 100 x12: 120 x14: 140 x16: 160
 site 9 - x2: 102 x4: 40 x6: 60 x8: 80 x10: 100 x12: 120 x14: 140 x16: 160 x18: 180 x20: 200 
 site 10 - x2: 102 x4: 40 x6: 60 x8: 80 x9: 90 x10: 100 x12: 120 x14: 140 x16: 160 x18: 180 x19: 190 x20: 200 
 Exit
+
 ```
 
 ### Mode 2 : Input From File and Output to Standard Mode
 
-In this mode, the input is provided using an Input File.
+To take an input from an Input File and Flushing the Output to the Terminal/Command Line, Select Mode 2.
 
+The program will ask for the FileName. 
+Enter a valid File Name.
 The Program assumes that a Valid File Name is provided
 
-A Sample File has been provided with the Submission.
+A Sample File [TestCases.txt] has been provided with the Submission.
 
-Required Command : 
-
-```
-java Solution <inputFile>
-```
 
 Example : [Only a Portion of Output is being shown as it contains over 20 Test Cases. Please check the provided output File for more details.]
 
 ```
-java Solution TestCases.txt
-COunt of Args : 1
-Input File : TestCases.txt
+java Solution
+Enter the Number for the corresponding Mode : 
+(1) Interactive Mode
+(2) Input From File And Output to Command Line
+(3) Input From File And Output to File
+2
+Input File : 
+TestCases.txt
 ===========================================
 TestCase : 1
 ===========================================
+begin(T1)
+begin(T2)
+W(T1,x1,101) 
+W(T2,x2,202)
+W(T1,x2,102) 
 Lock Conflict for Transaction : T1
+W(T2,x1,201)
 Lock Conflict for Transaction : T2
+end(T1)
 Aborting Transaction : T2
 Writing Value : x1.2
 Writing Value : x2.1
@@ -121,6 +144,7 @@ Writing Value : x2.8
 Writing Value : x2.9
 Writing Value : x2.10
 Transaction Committed : T1
+dump()
 site 1 - x2: 102 x4: 40 x6: 60 x8: 80 x10: 100 x12: 120 x14: 140 x16: 160 x18: 180 x20: 200 
 site 2 - x1: 101 x2: 102 x4: 40 x6: 60 x8: 80 x10: 100 x11: 110 x12: 120 x14: 140 x16: 160 x18: 180 x20: 200 
 site 3 - x2: 102 x4: 40 x6: 60 x8: 80 x10: 100 x12: 120 x14: 140 x16: 160 x18: 180 x20: 200 
@@ -136,24 +160,25 @@ site 10 - x2: 102 x4: 40 x6: 60 x8: 80 x9: 90 x10: 100 x12: 120 x14: 140 x16: 16
 
 ### Mode 3 : Input From File and Output To File
 
-In this mode, the input is provided using an Input File.
+To take an input from an Input File and Flushing the Output to another File, Select Mode 3.
 
-The output is provided using an Output File.
+The input is taken from a provided inputFile and the output is written to a File provided as the output file.
 
 The program assumes that the Input File is a Valid File and the Program has authority to create a new File
 
-Required Command : 
-```
-java Solution <inputFile> <outputFile>
-```
-
-Example : 
+Example : The example input[testCases.txt] and output Files[myFinalResult.txt] have been provided with the Submission.
 
 ```
-java Solution TestCases.txt output.txt
-COunt of Args : 2
-Input File : TestCases.txt
-Output File : output.txt
+java Solution
+Enter the Number for the corresponding Mode : 
+(1) Interactive Mode
+(2) Input From File And Output to Command Line
+(3) Input From File And Output to File
+3
+Input File : 
+TestCases.txt
+Output File : 
+newOutput.txt
 ```
 
 ## Basic Commands 
