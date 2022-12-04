@@ -20,7 +20,7 @@ import java.io.*;
 
 public class Solution{
 	public static Logger logger;
-	
+	public static int selectMode;
 	/**
 	 * 
 	 * @param args : The Command Line Arguments
@@ -32,11 +32,22 @@ public class Solution{
 		transactionManager.initialiseDataBase();
 		Scanner scanner = new Scanner(System.in);
 		int currentTime = 0;
-		System.out.println("COunt of Args : " + args.length);
-		if(args.length >= 1) {
-			//Setup the Input File
-			System.out.println("Input File : " + args[0]);
-			File file = new File(args[0]);
+		selectMode = 0;
+		System.out.println("Enter the Number for the corresponding Mode : ");
+		
+		System.out.println("(1) Interactive Mode");
+		System.out.println("(2) Input From File And Output to Command Line");
+		System.out.println("(3) Input From File And Output to File");
+		selectMode = scanner.nextInt();
+		
+		if(selectMode == 1) {
+			// Interactive Mode
+			// Nothing is Required
+		}else if(selectMode == 2) {
+			
+			System.out.println("Input File : ");
+			String inputFileName = scanner.next();
+			File file = new File(inputFileName);
 			try {
 				scanner = new Scanner(file);
 			} catch (FileNotFoundException e) {
@@ -44,12 +55,28 @@ public class Solution{
 				System.out.println("Input File Not Found .. Exiting System");
 				System.exit(0);
 			}
+			
+		}else if(selectMode == 3) {
+			
+			System.out.println("Input File : ");
+			String inputFileName = scanner.next();
+			System.out.println("Output File : ");
+			String outputFileName = scanner.next();
+			File file = new File(inputFileName);
+			try {
+				scanner = new Scanner(file);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				System.out.println("Input File Not Found .. Exiting System");
+				System.exit(0);
+			}
+			logger = new Logger(outputFileName);
+			
+		}else {
+			System.out.println("Invalid Mode Provided");
+			System.exit(0);
 		}
 		
-		if(args.length >= 2) {
-			System.out.println("Output File : " + args[1]);
-			logger = new Logger(args[1]);
-		}
 		int testCase = 1;
 		Solution.logger.log("===========================================");
 		Solution.logger.log("TestCase : " + testCase);
@@ -68,7 +95,7 @@ public class Solution{
 				currentTime = 0;
 				continue;
 			}
-			if(Solution.logger.isFileMode) {
+			if(selectMode != 1) {
 				Solution.logger.log(inputCommand);
 			}
 			currentTime++;

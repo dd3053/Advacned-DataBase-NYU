@@ -24,6 +24,7 @@ public class Logger {
 			e.printStackTrace();
 			System.out.println("Output File is Invalid. Continue in Standard Output Mode");
 			isFileMode = false;
+			Solution.selectMode = 2;
 		}
 	}
 	
