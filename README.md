@@ -167,5 +167,5 @@ The following commands are supported :
 6. end(T) : Ends The Transaction T. It shows whether Transaction T was commited or T was aborted.
 7. fail(siteNumber) : The siteNumber Fails
 8. recover(siteNumber) : The SiteNumber recovers
-9. Exit() : Exits the Simulation
+9. Exit() : Exits the Program
 10. nextTC() : Starts a new Simulation without Exiting the Program
