@@ -7,6 +7,24 @@ Programming Language : **Java**
 
 Semester : Fall 2022 Semester
 
+## Running The Program Using Reprozip
+
+Please follow the below steps to execute the program on Reprozip : 
+
+1. The program must be first unzipped using below command : 
+```
+reprounzip directory setup RepCRec.rpz ~/<yourDesiredDirectoryName>
+```
+
+2. Run the Program using the below Commands : 
+```
+reprounzip directory run ~/<yourDesiredDirectoryName>
+```
+
+**Note** : Please use Absolute Paths for the input and output Files.
+
+Please check out the different Modes explained in the section **Executing the Program Section** for more details about the Program
+
 ## Comiling The Files : 
 There are 8 .java Files which are given as below : 
 1. Command.java
